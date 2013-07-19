@@ -4,34 +4,31 @@
 <div id="ad_hoc_options">
   <%= "<h5 id='not_all_available'>#{t(:not_all_combinations_available)}</h5>".html_safe if !@product.ad_hoc_variant_exclusions.empty? %>
 
-  <dl>
-    <% @product.ad_hoc_option_types.each do |ahot| %>
-      <% ot=ahot.option_type %>
-      <% class_str='ad-hoc-option-select' %>
-      <% class_str += ' required' if ahot.is_required %>
-      <% class_str += ' ad_hoc' if !@product.ad_hoc_variant_exclusions.empty? %>
+  <% @product.ad_hoc_option_types.each do |ahot| %>
+    <% ot=ahot.option_type %>
+    <% class_str='ad-hoc-option-select' %>
+    <% class_str += ' required' if ahot.is_required %>
+    <% class_str += ' ad_hoc' if !@product.ad_hoc_variant_exclusions.empty? %>
 
-      <%# render a custom partial based on the option type name? %>
+    <%# render a custom partial based on the option type name? %>
 
-      <% partial_name = "spree/products/ad_hoc_options/#{ot.name.gsub(/(-)|(\s)/,"_").downcase}" %>
-      <% if lookup.exists?(partial_name,nil,true) %>
-        <%= render :partial => partial_name, :locals => {:option_type=>ahot, :class_str=>class_str} %>
-      <% else %>
-        <dt><%= ot.presentation %></dt>
-        <% select_opts = {:class => class_str} %>
-        <% select_opts[:prompt] = 'None' if ahot.option_values.size > 1 && ahot.option_values.none? {|ov| ov.selected? }%>
+    <% partial_name = "spree/products/ad_hoc_options/#{ot.name.gsub(/(-)|(\s)/,"_").downcase}" %>
+    <% if lookup.exists?(partial_name,nil,true) %>
+      <%= render :partial => partial_name, :locals => {:option_type=>ahot, :class_str=>class_str} %>
+    <% else %>
+      <h6><%= ot.presentation %></h6>
+      <% select_opts = {:class => class_str} %>
+      <% select_opts[:prompt] = "Please Select Your Options" if ahot.option_values.size > 1 && ahot.option_values.none? {|ov| ov.selected? }%>
 
-        <% selected_option_value = ahot.option_values.detect {|ov| ov.selected? } %>
-        <dd>
-          <%= select_tag "ad_hoc_option_values[#{ahot.id}]",
-           options_for_select(ad_hoc_option_value_options(ahot.option_values),
-                              selected_option_value.present? ?
-                                selected_option_value.id.to_s : nil),
-            select_opts
-            %>
-        </dd>
-      <% end %>
-      <% end %>  <%# each %>
-  </dl>
+      <% selected_option_value = ahot.option_values.detect {|ov| ov.selected? } %>
+      <%= select_tag "ad_hoc_option_values[#{ahot.id}]",
+       options_for_select(ad_hoc_option_value_options(ahot.option_values),
+                          selected_option_value.present? ?
+                            selected_option_value.id.to_s : nil),
+        select_opts
+        %>
+    <% end %>
+    <% end %>  <%# each %>
+
 </div>
 <% end %>
