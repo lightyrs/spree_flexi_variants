@@ -18,8 +18,8 @@ module Spree
         @order.add_variant(Variant.find(variant_id), quantity, ad_hoc_option_value_ids, product_customizations) if quantity > 0
       end if params[:products]
 
-      params[:variants].each do |variant_id, quantity|
-        quantity = quantity.to_i
+      params[:variants].each do |_,variant_id|
+        quantity = params[:quantity].to_i
         @order.add_variant(Variant.find(variant_id), quantity, ad_hoc_option_value_ids, product_customizations) if quantity > 0
       end if params[:variants]
 
