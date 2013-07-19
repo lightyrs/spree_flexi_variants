@@ -64,7 +64,7 @@ module Spree
 
     def ad_hoc_option_value_options(ad_hoc_option_values)
       ad_hoc_option_values.map do |ah_ov|
-        [ad_hoc_option_value_presentation_with_price_modifier(ah_ov),ah_ov.id.to_s]
+        [ad_hoc_option_value_presentation_with_price_modifier(ah_ov).html_safe,ah_ov.id.to_s]
       end
     end
 
@@ -82,8 +82,8 @@ module Spree
 
 
     def ad_hoc_option_value_presentation_with_price_modifier(ah_ov)
-      presentation_string = ah_ov.price_modifier.nil? ? 
-                             ah_ov.option_value.presentation : 
+      presentation_string = ah_ov.price_modifier.nil? ?
+                             ah_ov.option_value.presentation :
                              "#{ah_ov.option_value.presentation} #{price_change_text(ah_ov)}"
     end
 
