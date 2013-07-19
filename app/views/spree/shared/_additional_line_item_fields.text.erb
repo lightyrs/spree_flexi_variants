@@ -2,7 +2,7 @@
   <% #TODO: group multi-select options (e.g. toppings) %>
 
   <% item.ad_hoc_option_values.each do |pov| %>
-    <%= pov.option_value.option_type.presentation %> = <%= pov.option_value.presentation %><%= "," unless pov == item.ad_hoc_option_values.last %>
+    <%= pov.option_value.option_type.presentation %> = <%= pov.option_value.presentation.html_safe %><%= "," unless pov == item.ad_hoc_option_values.last %>
   <% end %>
 <% end # unless empty? %>
 
@@ -12,7 +12,7 @@
       <% customization.customized_product_options.each do |option| %>
          <% next if option.empty? %>
 
-  	     <% partial = option.customizable_product_option.name %>
+         <% partial = option.customizable_product_option.name %>
          <% lookup=ActionView::LookupContext.new(ActionController::Base.view_paths, {:formats => [:html]}) %>
          <% if lookup.exists?("spree/products/#{partial}",nil,true) %>
             <%= render :partial => "spree/orders/custom_fields/#{partial}", :locals=>{:option => option} %>
@@ -20,7 +20,7 @@
               <% if option.customization_image? %>
                 <%= option.customizable_product_option.presentation %> = <%= File.basename option.customization_image.url %>
               <% else %>
-                <%= option.customizable_product_option.presentation %> = <%= option.value %>
+                <%= option.customizable_product_option.presentation %> = <%= option.value.html_safe %>
               <% end %>
          <% end %>
       <% end # each option %>
